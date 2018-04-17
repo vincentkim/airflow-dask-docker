@@ -94,10 +94,11 @@ case "$1" in
   version)
     exec airflow "$@"
     ;;
-#  dask)
-#    dask-worker 172.31.81.136:8786
+  dask)
+#   exec dask-worker 172.31.81.136:8786
+   exec dask-worker ${DASK_HOST}:${DASK_PORT}
 #    exec airflow "$@"
-#    ;;
+    ;;
   *)
     # The command is something like bash, not an airflow subcommand. Just run it in the right environment.
     exec "$@"
