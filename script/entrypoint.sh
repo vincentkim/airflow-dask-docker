@@ -71,13 +71,18 @@ AIRFLOW__CELERY__CELERY_RESULT_BACKEND="db+postgresql://$POSTGRES_USER:$POSTGRES
 case "$1" in
   webserver)
     wait_for_port "Postgres" "$POSTGRES_HOST" "$POSTGRES_PORT"
-    wait_for_redis
+#    wait_for_redis
     airflow initdb
     if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ];
     then
       # With the "Local" executor it should all run in one container.
       airflow scheduler &
     fi
+#    if [ "$AIRFLOW__CORE__EXECUTOR" = "DaskExecutor" ];
+#    then
+#      # With the "Local" executor it should all run in one container.
+#      airflow scheduler &
+#    fi
     exec airflow webserver
     ;;
   worker|scheduler)

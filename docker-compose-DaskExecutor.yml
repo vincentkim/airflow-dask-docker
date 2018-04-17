@@ -1,11 +1,11 @@
 version: '2.1'
 services:
-#    postgres:
-#        image: postgres:9.6
-#        environment:
-#            - POSTGRES_USER=airflow
-#            - POSTGRES_PASSWORD=airflow
-#            - POSTGRES_DB=airflow
+    postgres:
+        image: postgres:9.6
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
 
     webserver:
 #        image: puckel/docker-airflow:1.9.0-2
@@ -13,12 +13,13 @@ services:
         image: vincentkim/airflow-dask-docker:1.9.0
         hostname: airflow-webserver
         restart: always
-#        depends_on:
-#            - postgres
+        depends_on:
+            - postgres
         environment:
             - LOAD_EX=n
-            - EXECUTOR=Local
-            - DASK_HOST=172.31.81.136
+#            - EXECUTOR=Local
+            - EXECUTOR=Dask
+            - DASK_HOST=172.31.92.115
             - DASK_PORT=8786
         volumes:
             - ./dags:/usr/local/airflow/dags
@@ -26,9 +27,9 @@ services:
             # - ./plugins:/usr/local/airflow/plugins
         ports:
             - "8080:8080"
-        network_mode: "host"
-#        command: webserver
-        command: dask
+#        network_mode: "host"
+        command: webserver
+#        command: dask
         healthcheck:
             test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
             interval: 30s
